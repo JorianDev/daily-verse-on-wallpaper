@@ -9,12 +9,28 @@ from datetime import date
 
 from PIL import Image, ImageDraw, ImageFont
 import feedparser
+import subprocess
+
+def actieve_wallpaper():
+    script = (
+        "var d = desktops();"
+        "d[0].currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];"
+        "print(d[0].readConfig('Image'));"
+    )
+    result = subprocess.run(
+        ["qdbus", "org.kde.plasmashell", "/PlasmaShell", "org.kde.PlasmaShell.evaluateScript", script],
+        capture_output=True, text=True, check=True,
+    )
+    return Path(result.stdout.strip().removeprefix("file://"))
+
 
 FEED_URL = "https://dailyverses.net/nl/rss.xml"                 # Vervang met je eigen RSS-feed URL indien gewenst
-ACHTERGROND = Path.home() / "Path/To/Your/Wallpaper.jpg"    # Vervang met je eigen standaard wallpaper
+# ACHTERGROND = Path.home() / "Path/To/Your/Wallpaper.jpg"      # Vervang met je eigen standaard wallpaper
+ACHTERGROND = actieve_wallpaper()                               # Gebruik de huidige wallpaper als achtergrond
 OUTPUT = Path.home() / f".cache/wallpaper-bijbeltekst-{date.today().isoformat()}.png"
 LETTERTYPE = "/usr/share/fonts/adwaita-mono-fonts/AdwaitaMono-Bold.ttf"
 FALLBACK = "De HEERE is mijn Herder, mij zal niets ontbreken. - Psalm 23:1"
+
 
 def haal_dagtekst(pogingen=20, wachttijd=15):
     for poging in range(1, pogingen + 1):

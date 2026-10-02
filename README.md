@@ -1,16 +1,32 @@
 # Wallpaper generator met Bijbeltekst
 Deze repo genereert elke dag opnieuw je wallpaper met een dagelijkse bijbeltekst erop. De bijbeltekst wordt opgehaald van [dailyverses.net](https://dailyverses.net/nl/rss.xml).
 
-## Installeren - Automatisch
-Vereist Linux met KDE Plasma en systemd. Voer vanuit de repository uit:
+:us: below
 
+## Benodigd
+- Linux met KDE Plasma
+- Python3 met ondersteuning `venv` en `pip`
+- Opdrachten `qdbus` en `plasma-apply-wallpaperimage`
+- Een internetverbinding tijdens installatie en voor het ophalen van de dagelijkse tekst
+
+## Installeren - Automatisch
+Open terminal in deze repo en voer uit:
 ```bash
-./install.sh
+./install-auto.sh
+```
+Het script maakt een eigen Python-omgeving aan in `~/.local/share/bijbeltekst-wallpaper`, installeert daarin `Pillow` en `feedparser`, en zet `bijbeltekst-wallpaper.py` en `bijbeltekst-wrapper.sh` in `~/.local/bin`. Het Python-script krijgt een verwijzing naar de eigen omgeving, zodat zowel direct starten als starten via de wrapper dezelfde afhankelijkheden gebruikt. De systemd-bestanden komen in `~/.config/systemd/user` en de timer wordt ingeschakeld. Hij draait dagelijks om 06:00; een gemiste uitvoering wordt na het opnieuw starten van de timer ingehaald.
+
+Controleer of de timer aanstaat met:
+```bash
+systemctl --user list-timers bijbeltekst.timer
+```
+Er is geen `sudo` nodig. Als Python geen `venv`-ondersteuning heeft, installeer deze dan bij jouw Linux-distro en voer het script opnieuw uit. De eerste uitvoering van de wallpaper-generator moet plaatsvinden in een actieve KDE-sessie, zodat `qdbus` de huidige wallpaper kan uitlezen.
+
+Om de timer uit te schakelen:
+```bash
+systemctl --user disable --now bijbeltekst.timer
 ```
 
-Het script vraagt om een afbeelding voor de achtergrond en installeert ontbrekende Python-afhankelijkheden via apt, dnf of pacman. Daarna komen de programma's in `~/.local/bin`, de instellingen in `~/.config/bijbeltekst-wallpaper` en de systemd-units in `~/.config/systemd/user`. De timer wordt meteen ingeschakeld en draait dagelijks om 06:00.
-
-Je kunt het pad ook direct meegeven: `./install.sh /pad/naar/wallpaper.jpg`. KDE Plasma, systemd en Python 3 moeten al aanwezig zijn.
 
 ## Installeren - Handmatig
 Wanneer automatisch installeren niet werkt, volg dan de volgende stappen:
@@ -36,3 +52,5 @@ Wanneer je wat verandert hebt in de timer-bestanden, voer dan het volgende comma
 ```bash
 systemctl --user daemon-reload 
 ```
+
+# English - Daily verse generator on wallpaper
