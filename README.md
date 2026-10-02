@@ -6,8 +6,8 @@ Deze repo genereert elke dag opnieuw je wallpaper met een dagelijkse bijbeltekst
 ## Table of contents
 1. Dutch
     - [Benodigd](#benodigd)
-    - [Installeren - Automatisch](installeren-automatisch)
-    - [Installeren - Handmatig](installeren-handmatig)
+    - [Installeren - Automatisch](installeren---automatisch)
+    - [Installeren - Handmatig](installeren---handmatig)
 2. English
     - [English - Daily Verse Generator](#english---daily-verse-generator-on-wallpaper)
     - [Required](#required)
